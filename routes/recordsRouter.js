@@ -17,4 +17,12 @@ router.post ("/:soldiersId/benefits", async (req, res) => {
     res.status(201).send(newRecord)
 })
 
+router.get("/:soldiersId/benefits", async (req, res) => {
+    const soldierId = req.params.soldiersId
+    const record = await recordsService.getSoldierRecord(soldierId)
+    res.send(record)
+})
+
+
+
 export default router

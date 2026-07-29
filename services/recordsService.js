@@ -23,4 +23,13 @@ const createNewRecord = async (data, soldierId) => {
     return record
 }
 
-export default {createNewRecord}
+const getSoldierRecord = async (soldierId) => {
+    const record = await recordsDal.getRecordBySoldierId(soldierId)
+    if (!record) {
+        const error = createError(404, `the record of soldier ${soldierId} not found`)
+        throw error
+    }
+    return record
+}
+
+export default {createNewRecord, getSoldierRecord}
