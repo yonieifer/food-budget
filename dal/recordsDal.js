@@ -19,4 +19,9 @@ const getRecordById = async (recordId) => {
     return record
 }
 
-export default {createNewRecord, addBenefitToRecord, getRecordById}
+const getRecordBySoldierId = async (soldierId) => {
+    const record = await collection.findOne({soldierId: soldierId})
+    return record
+}
+
+export default {writeNewRecord, addBenefitToRecord, getRecordById, getRecordBySoldierId}
