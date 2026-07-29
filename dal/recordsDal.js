@@ -8,8 +8,8 @@ const writeNewRecord = async (record) => {
     return result.insertedId.toString()
 }
 
-const addBenefitToRecord = async (benefit, recordId) => {
-    const result = await collection.updateOne({_id: new ObjectId(recordId)}, { $push: { history: benefit}, $set: {currentBenefitType: benefit.benefitType} })
+const addBenefitToRecord = async (benefit, soldierId) => {
+    const result = await collection.updateOne({soldierId: soldierId}, { $push: { history: benefit}, $set: {currentBenefitType: benefit.benefitType} })
     return result.modifiedCount > 0
 }
 
@@ -24,4 +24,16 @@ const getRecordBySoldierId = async (soldierId) => {
     return record
 }
 
-export default {writeNewRecord, addBenefitToRecord, getRecordById, getRecordBySoldierId}
+const closeCurrentBenefit = async (soldierId) => {
+    const record = await getRecordBySoldierId(soldierId)
+    const history = record.history
+    const currentBenefit = history.pop()
+    currentBenefit.endDate = Date().now().toString()
+    history.push(currentBenefit)
+    const result = await collection.updateOne({soldierId: soldierId}, {$set: {history: history}})
+    return result.modifiedCount > 0
+}
+
+export default {writeNewRecord, addBenefitToRecord, getRecordById, getRecordBySoldierId, closeCurrentBenefit}
+
+

@@ -18,7 +18,7 @@ const createNewRecord = async (data, soldierId) => {
         throw error
     }
     const newId = await recordsDal.writeNewRecord({soldierId, unit, currentBenefitType: null, history: []})
-    await recordsDal.addBenefitToRecord({startDate, endDate: null, decisionReason, budjetApproved, benefitType, details}, newId)
+    await recordsDal.addBenefitToRecord({startDate, endDate: null, decisionReason, budjetApproved, benefitType, details}, soldierId)
     const record = await recordsDal.getRecordById(newId)
     return record
 }
@@ -32,4 +32,12 @@ const getSoldierRecord = async (soldierId) => {
     return record
 }
 
-export default {createNewRecord, getSoldierRecord}
+const addNewBenefitToSoldier = async (data, soldierId) => {
+    const {benefitType, details, decisionReason, budjetApproved, decisionDate} = data
+    await recordsDal.closeCurrentBenefit(soldierId)
+    await recordsDal.addBenefitToRecord({startDate: decisionDate, endDate: null, decisionReason, budjetApproved, benefitType, details}, soldierId)
+    const updatedRecord = await getSoldierRecord(soldierId)
+    return updatedRecord
+}
+
+export default {createNewRecord, getSoldierRecord, addNewBenefitToSoldier}

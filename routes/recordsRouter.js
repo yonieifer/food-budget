@@ -23,6 +23,18 @@ router.get("/:soldiersId/benefits", async (req, res) => {
     res.send(record)
 })
 
+router.patch("/:soldiersId/benefits", async (req, res) => {
+    const soldierId = req.params.soldiersId  
+    const {benefitType, details, decisionReason, budjetApproved, decisionDate} = req.body
+    const requiredFields = {benefitType, details, decisionReason, budjetApproved, decisionDate}
+    for (const key in requiredFields) {
+        if (!req[key]) {
+            res.status(400).send(`field ${key} is required`)
+        }
+    }
+    const updatedRecord = await recordsService.addNewBenefitToSoldier({benefitType, details, decisionReason, budjetApproved, decisionDate}, soldierId)
+    res.send(updatedRecord)
+})
 
 
 export default router
