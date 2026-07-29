@@ -3,7 +3,7 @@ import {ObjectId} from "mongodb"
 
 const collection = db.collection("records")
 
-const createNewRecord = async (record) => {
+const writeNewRecord = async (record) => {
     const result = await collection.insertOne(record);
     return result.insertedId.toString()
 }
@@ -18,3 +18,5 @@ const getRecordById = async (recordId) => {
     const record = await collection.findOne({_id: new ObjectId(recordId)})
     return record
 }
+
+export default {createNewRecord, addBenefitToRecord, getRecordById}
