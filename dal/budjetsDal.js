@@ -6,5 +6,9 @@ const createBudjet = async (budjet) => {
     return data[0]
 }
 
+const getBudjetByFilter = async (filter) => {
+    const { data, error } = await sb.from("budjets").select().eq()
+}
+
 
 export default {createBudjet}
