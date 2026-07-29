@@ -8,7 +8,7 @@ const createNewRecord = async (data, soldierId) => {
         throw error
     }
     const {unit, benefitType, details, decisionReason, budjetApproved, startDate} = data
-    const benefitTypes = ["giftCart", "diningHall"]
+    const benefitTypes = ["giftCard", "diningHall"]
     if (!benefitTypes.includes(benefitType)) {
         const error = createError(400, `${benefitType} is unauthorized benefit type`)
         throw error
