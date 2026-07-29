@@ -18,7 +18,7 @@ const createNewRecord = async (data, soldierId) => {
         throw error
     }
     const newId = await recordsDal.writeNewRecord({soldierId, unit, currentBenefitType: null, history: []})
-    await recordsDal.addBenefitToRecord({startDate, endDate: null, decisionReason, budjetApproved, benefitType, details})
+    await recordsDal.addBenefitToRecord({startDate, endDate: null, decisionReason, budjetApproved, benefitType, details}, newId)
     const record = await recordsDal.getRecordById(newId)
     return record
 }
