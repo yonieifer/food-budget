@@ -9,9 +9,8 @@ const writeNewRecord = async (record) => {
 }
 
 const addBenefitToRecord = async (benefit, recordId) => {
-    const addToHistory = await collection.updateOne({_id: new ObjectId(recordId)}, { $push: { history: benefit} })
-    const changeCurrentType = await collection.updateOne({_id: new ObjectId(recordId)}, {$set: {currentBenefitType: benefit.benefitType}})
-    return addToHistory.modifiedCount
+    const result = await collection.updateOne({_id: new ObjectId(recordId)}, { $push: { history: benefit}, $set: {currentBenefitType: benefit.benefitType} })
+    return result.modifiedCount > 0
 }
 
 const getRecordById = async (recordId) => {
