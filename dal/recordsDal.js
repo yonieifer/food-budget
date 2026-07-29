@@ -15,7 +15,8 @@ const addBenefitToRecord = async (benefit, recordId) => {
 
 const getRecordById = async (recordId) => {
     const record = await collection.findOne({_id: new ObjectId(recordId)})
-    return record
+    const {_id, ...rest} = record
+    return {id: _id.toString(), ...rest}
 }
 
 const getRecordBySoldierId = async (soldierId) => {
