@@ -5,8 +5,8 @@ import recordsService from "../services/recordsService.js"
 const router = express.Router()
 
 router.post ("/:soldiersId/benefits", async (req, res) => {
-    const {soldierId} = req.params
-    const {unit, benefitType, details, decisionReason, budjetApproved, startDate} = req.data
+    const soldierId = req.params.soldiersId   
+    const {unit, benefitType, details, decisionReason, budjetApproved, startDate} = req.body
     const requiredFields = {unit, benefitType, details, decisionReason, budjetApproved, startDate}
     for (const key in requiredFields) {
         if (!key) {
