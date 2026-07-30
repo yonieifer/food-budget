@@ -31,8 +31,8 @@ router.patch("/:soldiersId/benefits", checkBody, async (req, res) => {
     const requiredFields = ["benefitType", "details", "decisionReason", "budjetApproved"]
     const missing = missingField(requiredFields, req.body)
     if (missing) {
-            res.status(400).send(`field ${missing} is required`)
-            return
+        res.status(400).send(`field ${missing} is required`)
+        return
     }
     const result = await recordsService.addNewBenefitToSoldier({decisionDate, ...req.body}, soldierId)
     if (result.reverted) {

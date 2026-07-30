@@ -1,4 +1,5 @@
 import budgetsDal from "../dal/budgetsDal.js";
+import expensesDal from "../dal/expensesDal.js";
 import { createError } from "../utils/utils.js";
 
 const createNewBudget = async (data) => {
@@ -61,23 +62,30 @@ const getTransactionsForBudget = async (budgetId) => {
     return expenses;
 };
 
-const createExpenseFromBudget = async (data, budgetId) => {
+const createExpenseForBudget = async (data, budgetId) => {
     const budget = await budgetsDal.getBudgetById(budgetId);
     if (!budget) {
         const error = createError(404, `budget ${budgetId} not found`);
         throw error;
     }
-    const totalExpenses = await getSpentAmountForBudget(budgetId)
-    const {amount, reason} = data
-    const remainingAmount = budget.allocatedAmount - (totalExpenses + amount)
+    const totalExpenses = await getSpentAmountForBudget(budgetId);
+    const { amount, reason } = data;
+    const remainingAmount = budget.allocatedAmount - (totalExpenses + amount);
     if (remainingAmount < 0) {
-        const error = createError()
+        return { error: "expense amount is too large", remainingAmount };
     }
-
+    const newExpense = await expensesDal.createExpense({
+        budgetId,
+        amount,
+        reason,
+        createdAt: new Date().toISOString(),
+    });
+    return { expense: newExpense, remainingAmount };
 };
 
 export default {
     createNewBudget,
     getBugetsAndDetails,
     getTransactionsForBudget,
+    createExpenseForBudget,
 };

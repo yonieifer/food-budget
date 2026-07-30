@@ -3,6 +3,7 @@ import budgetService from "../services/budgetService.js"
 import { missingField } from "../utils/utils.js" 
 import { checkBody, checkQuery } from "../middleWares/middlewares.js"
 import budgetsDal from "../dal/budgetsDal.js"
+import expensesDal from "../dal/expensesDal.js"
 
 
 const router = express.Router()
@@ -28,10 +29,25 @@ router.get("", checkQuery, async (req, res) => {
     res.send(budgets)
 })
 
-router.get(":id/transactions", async (req, res) => {
+router.get("/:id/transactions", async (req, res) => {
     const id = req.params.id 
     const expenses = await budgetService.getTransactionsForBudget(id)
     res.send(expenses)
+})
+
+router.post("/:id/spend", checkBody, async (req, res) => {
+    const budgetId = req.params.id
+    const {amount} = req.body
+    if (!amount) {
+        res.status(400).send(`field amount is required`)
+        return
+    }
+    const result = await budgetService.createExpenseForBudget(req.body, budgetId)
+    if (result.error) {
+        res.status(400).send(result)
+        return
+    }
+    res.status(201).send(result)
 })
 
 export default router
