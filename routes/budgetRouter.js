@@ -23,7 +23,7 @@ router.get("", checkQuery, async (req, res) => {
     if (unit) filter.unit = unit
     if (month) filter.month = month
     if (benefitType) filter.benefitType = benefitType
-    const budgets = await budgetService.getBugetsAndDetailes(filter)
+    const budgets = await budgetService.getBugetsAndDetails(filter)
     res.send(budgets)
 })
 

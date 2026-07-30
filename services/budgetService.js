@@ -23,7 +23,7 @@ const getSpentAmountForBudget = async (budgetId) => {
     return total
 }
 
-const getBugetsAndDetailes = async (filter) => {
+const getBugetsAndDetails = async (filter) => {
     const budgets = await budgetsDal.getBudgetByFilter(filter)
     for (const budget of budgets) {
         const spentAmount = await getSpentAmountForBudget(budget.id)
@@ -33,4 +33,4 @@ const getBugetsAndDetailes = async (filter) => {
     return budgets
 }
 
-export default {createNewBudget, getBugetsAndDetailes}
+export default {createNewBudget, getBugetsAndDetails}
