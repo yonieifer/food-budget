@@ -9,7 +9,7 @@ const createNewBudget = async (data) => {
         throw error
     }
     const budgetExists = await budgetsDal.getBudgetByFilter({unit, benefitType, month})
-    if (budgetExists) {
+    if (budgetExists.length > 0) {
         const error = createError(409, `budget for ${benefitType} for unit ${unit} for month ${month} already exists`)
         throw error
     }
