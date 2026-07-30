@@ -12,13 +12,13 @@ router.post("", checkBody, async (req, res) => {
     const missing = missingField(requiredFields, req.body)
     if (missing) {
             res.status(400).send(`field ${missing} is required`)
+            return
     }
     const newBudget = await budgetService.createNewBudget(req.body)
     res.status(201).send(newBudget)
 })
 
 router.get("", checkQuery, async (req, res) => {
-    
     const {unit, month, benefitType} = req.query
     const filter = {}
     if (unit) filter.unit = unit
@@ -28,7 +28,7 @@ router.get("", checkQuery, async (req, res) => {
     res.send(budgets)
 })
 
-router.get(":id/transactions", (req, res) => {
+router.get(":id/transactions", async (req, res) => {
     const id = req.params.id 
     const expenses = await budgetService.getTransactionsForBudget(id)
     res.send(expenses)
