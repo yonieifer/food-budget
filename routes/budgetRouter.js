@@ -2,6 +2,7 @@ import express from "express"
 import budgetService from "../services/budgetService.js"
 import { missingField } from "../utils/utils.js" 
 import { checkBody, checkQuery } from "../middleWares/middlewares.js"
+import budgetsDal from "../dal/budgetsDal.js"
 
 
 const router = express.Router()
@@ -25,6 +26,12 @@ router.get("", checkQuery, async (req, res) => {
     if (benefitType) filter.benefitType = benefitType
     const budgets = await budgetService.getBugetsAndDetails(filter)
     res.send(budgets)
+})
+
+router.get(":id/transactions", (req, res) => {
+    const id = req.params.id 
+    const expenses = await budgetService.getTransactionsForBudget(id)
+    res.send(expenses)
 })
 
 export default router

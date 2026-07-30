@@ -33,4 +33,14 @@ const getBugetsAndDetails = async (filter) => {
     return budgets
 }
 
-export default {createNewBudget, getBugetsAndDetails}
+const getTransactionsForBudget = async (budgetId) => {
+    const budget = await budgetsDal.getBudgetById(budgetId)
+    if (!budget) {
+        const error = createError(404, `budget ${budgetId} not found`)
+        throw error
+    }
+    const expenses = await budgetsDal.getExpensesForBudget(budgetId)
+    return expenses
+}
+
+export default {createNewBudget, getBugetsAndDetails, getTransactionsForBudget}
