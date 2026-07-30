@@ -1,5 +1,5 @@
 import recordsDal from "../dal/recordsDal.js";
-import { createError,  } from "../utils/utils.js";
+import { createError, isPrime, getYearToDate  } from "../utils/utils.js";
 
 const createNewRecord = async (data, soldierId) => {
     const soldierRecord = await recordsDal.getRecordBySoldierId(soldierId)
@@ -34,10 +34,19 @@ const getSoldierRecord = async (soldierId) => {
 
 const addNewBenefitToSoldier = async (data, soldierId) => {
     const {benefitType, details, decisionReason, budjetApproved, decisionDate} = data
-    await recordsDal.closeCurrentBenefit(soldierId)
-    await recordsDal.addBenefitToRecord({startDate: decisionDate, endDate: null, decisionReason, budjetApproved, benefitType, details}, soldierId)
-    const updatedRecord = await getSoldierRecord(soldierId)
-    return updatedRecord
+    const isFirstOfTheMonth = new Date(decisionDate).getDate() === 1
+    const yearToDate = getYearToDate(decisionDate)
+    let reverted
+    if (isFirstOfTheMonth && isPrime(yearToDate)) {
+        reverted = true
+    }
+    else {
+        await recordsDal.closeCurrentBenefit(soldierId)
+        await recordsDal.addBenefitToRecord({startDate: decisionDate, endDate: null, decisionReason, budjetApproved, benefitType, details}, soldierId)
+        reverted = false
+    }
+    const record = await getSoldierRecord(soldierId)
+    return {reverted, record}
 }
 
 export default {createNewRecord, getSoldierRecord, addNewBenefitToSoldier}

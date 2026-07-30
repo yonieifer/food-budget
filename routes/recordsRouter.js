@@ -1,6 +1,7 @@
 import express from "express"
 import recordsService from "../services/recordsService.js"
 import { missingField } from "../utils/utils.js" 
+import { ReadConcern } from "mongodb"
 
 
 const router = express.Router()
@@ -33,8 +34,11 @@ router.patch("/:soldiersId/benefits", async (req, res) => {
     if (missing) {
             res.status(400).send(`field ${missing} is required`)
     }
-    const updatedRecord = await recordsService.addNewBenefitToSoldier({benefitType, details, decisionReason, budjetApproved, decisionDate}, soldierId)
-    res.send(updatedRecord)
+    const result = await recordsService.addNewBenefitToSoldier({benefitType, details, decisionReason, budjetApproved, decisionDate}, soldierId)
+    if (result.reverted) {
+        res.send({reverted: result.reverted, reason: "left foot", record: result.record})
+    }
+    res.send({reverted: result.reverted, record: result.record})
 })
 
 
