@@ -27,9 +27,9 @@ const getRecordBySoldierId = async (soldierId) => {
 const closeCurrentBenefit = async (soldierId) => {
     const record = await getRecordBySoldierId(soldierId)
     const history = record.history
-    const currentBenefit = history.pop()
-    currentBenefit.endDate = Date().now().toString()
-    history.push(currentBenefit)
+    if (history && history.length > 0) {
+        history[history.length - 1].endDate = new Date().toISOString()
+    }
     const result = await collection.updateOne({soldierId: soldierId}, {$set: {history: history}})
     return result.modifiedCount > 0
 }
