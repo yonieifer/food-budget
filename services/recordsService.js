@@ -1,5 +1,5 @@
 import recordsDal from "../dal/recordsDal.js";
-import { createError } from "../utils/utils.js";
+import { createError,  } from "../utils/utils.js";
 
 const createNewRecord = async (data, soldierId) => {
     const soldierRecord = await recordsDal.getRecordBySoldierId(soldierId)
@@ -17,9 +17,9 @@ const createNewRecord = async (data, soldierId) => {
         const error = createError(400, "budjetApproved field must be boolean")
         throw error
     }
-    const newId = await recordsDal.writeNewRecord({soldierId, unit, currentBenefitType: null, history: []})
+    const id = await recordsDal.writeNewRecord({soldierId, unit, currentBenefitType: null, history: []})
     await recordsDal.addBenefitToRecord({startDate, endDate: null, decisionReason, budjetApproved, benefitType, details}, soldierId)
-    const record = await recordsDal.getRecordById(newId)
+    const record = {id, soldierId, unit, currentBenefitType: benefitType, history: [{startDate, endDate: null, budjetApproved, benefitType, details}]}
     return record
 }
 
