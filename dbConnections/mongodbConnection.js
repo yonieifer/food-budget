@@ -5,11 +5,11 @@ const getMdbConnection = async () => {
     try {
         await client.connect();
         const db = client.db("food-budjet");
-        return db
+        return db;
     } catch (error) {
         console.log(error);
     }
-}
+};
 
-const db = await getMdbConnection()
-export default db
+const db = await getMdbConnection();
+export default db;

@@ -20,9 +20,9 @@ export const isPrime = (num) => {
 };
 
 export const getYearToDate = (strDate) => {
-    const date = new Date(strDate)
-    const startOfTheYear = new Date(date.getFullYear(), 0, 0)
-    const secDiff = date - startOfTheYear
-    const oneDay = 1000 * 60 * 60 * 24
-    return secDiff / oneDay
-}
+    const date = new Date(strDate);
+    const startOfTheYear = new Date(date.getFullYear(), 0, 0);
+    const secDiff = date - startOfTheYear;
+    const oneDay = 1000 * 60 * 60 * 24;
+    return secDiff / oneDay;
+};

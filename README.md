@@ -2,7 +2,7 @@
 
 מסדי נתונים:
 מונגו (רשומות): שומר את היסטוריית ההטבות של החייל. יותר נוח להוריד את כל המערך של הלקוח, לשנות ולכתוב את כולם חזרה בלי להסתבך עם אינדקסים.
-סופאבייס (תקציבים והוצאות): טבלאות  מתאימות יותר לחיבור נתונים וחישובים (כמו סיכום הוצאות ובדיקת יתרה).
+ סופאבייס (תקציבים והוצאות): טבלאות  מתאימות יותר לחיבור נתונים וחישובים וגם רק בSQL אפשרי לעשות מפתח זר בגלל שזה בסיס נתונים רלציוני.
 
 ישויות:
 
@@ -25,4 +25,28 @@ POST /budget/:id/spend: רושם הוצאה. בודק קודם שנשאר מספ
 
 
 
-קבצים:
+מבנה קבצים:
+
+app.js
+README.md
+.gitignore
+package.json
+package-lock.json
+dal/
+    budgetsDal.js
+    expensesDal.js
+    recordsDal.js
+middlewares/
+    middlewares.js
+routes/
+    budgetRouter.js
+    recordRouter.js
+services/
+    budgetService.js
+    recordService.js
+dbConnection/
+    supabaseConnection.js
+    mongodbConnection.js
+utils/
+    utils.js
+
