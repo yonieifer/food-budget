@@ -10,7 +10,7 @@ router.post ("/:soldiersId/benefits", async (req, res) => {
     const soldierId = req.params.soldiersId   
     const {unit, benefitType, details, decisionReason, budjetApproved} = req.body
     const {startDate} = req.body || {startDate: new Date().toISOString()} 
-    const requiredFields = [unit, benefitType, details, decisionReason, budjetApproved, startDate]
+    const requiredFields = [unit, benefitType, details, decisionReason, budjetApproved]
     const missing = missingField(requiredFields, req.body)
     if (missing) {
             res.status(400).send(`field ${missing} is required`)
@@ -29,7 +29,7 @@ router.patch("/:soldiersId/benefits", async (req, res) => {
     const soldierId = req.params.soldiersId  
     const {benefitType, details, decisionReason, budjetApproved} = req.body
     const {decisionDate} = req.body || {decisionDate: new Date().toISOString()}
-    const requiredFields = [benefitType, details, decisionReason, budjetApproved, decisionDate]
+    const requiredFields = [benefitType, details, decisionReason, budjetApproved]
     const missing = missingField(requiredFields, req.body)
     if (missing) {
             res.status(400).send(`field ${missing} is required`)
