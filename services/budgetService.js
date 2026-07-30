@@ -2,45 +2,82 @@ import budgetsDal from "../dal/budgetsDal.js";
 import { createError } from "../utils/utils.js";
 
 const createNewBudget = async (data) => {
-    const {unit, benefitType, month, allocatedAmount} = data
-    const benefitTypes = ["giftCard", "diningHall"]
+    const { unit, benefitType, month, allocatedAmount } = data;
+    const benefitTypes = ["giftCard", "diningHall"];
     if (!benefitTypes.includes(benefitType)) {
-        const error = createError(400, `${benefitType} is unauthorized benefit type`)
-        throw error
+        const error = createError(
+            400,
+            `${benefitType} is unauthorized benefit type`,
+        );
+        throw error;
     }
-    const budgetExists = await budgetsDal.getBudgetByFilter({unit, benefitType, month})
+    const budgetExists = await budgetsDal.getBudgetByFilter({
+        unit,
+        benefitType,
+        month,
+    });
     if (budgetExists.length > 0) {
-        const error = createError(409, `budget for ${benefitType} for unit ${unit} for month ${month} already exists`)
-        throw error
+        const error = createError(
+            409,
+            `budget for ${benefitType} for unit ${unit} for month ${month} already exists`,
+        );
+        throw error;
     }
-    const newBudget = await budgetsDal.createBudget({unit, benefitType, month, allocatedAmount})
-    return newBudget
-}
+    const newBudget = await budgetsDal.createBudget({
+        unit,
+        benefitType,
+        month,
+        allocatedAmount,
+    });
+    return newBudget;
+};
 
 const getSpentAmountForBudget = async (budgetId) => {
-    const expenses = await budgetsDal.getExpensesForBudget(budgetId)
-    const total = expenses.reduce((total, expense) => total + expense.amount, 0)
-    return total
-}
+    const expenses = await budgetsDal.getExpensesForBudget(budgetId);
+    const total = expenses.reduce(
+        (total, expense) => total + expense.amount,
+        0,
+    );
+    return total;
+};
 
 const getBugetsAndDetails = async (filter) => {
-    const budgets = await budgetsDal.getBudgetByFilter(filter)
+    const budgets = await budgetsDal.getBudgetByFilter(filter);
     for (const budget of budgets) {
-        const spentAmount = await getSpentAmountForBudget(budget.id)
-        budget.spentAmount = spentAmount
-        budget.remainingAmount = budget.allocatedAmount - spentAmount
+        const spentAmount = await getSpentAmountForBudget(budget.id);
+        budget.spentAmount = spentAmount;
+        budget.remainingAmount = budget.allocatedAmount - spentAmount;
     }
-    return budgets
-}
+    return budgets;
+};
 
 const getTransactionsForBudget = async (budgetId) => {
-    const budget = await budgetsDal.getBudgetById(budgetId)
+    const budget = await budgetsDal.getBudgetById(budgetId);
     if (!budget) {
-        const error = createError(404, `budget ${budgetId} not found`)
-        throw error
+        const error = createError(404, `budget ${budgetId} not found`);
+        throw error;
     }
-    const expenses = await budgetsDal.getExpensesForBudget(budgetId)
-    return expenses
-}
+    const expenses = await budgetsDal.getExpensesForBudget(budgetId);
+    return expenses;
+};
 
-export default {createNewBudget, getBugetsAndDetails, getTransactionsForBudget}
+const createExpenseFromBudget = async (data, budgetId) => {
+    const budget = await budgetsDal.getBudgetById(budgetId);
+    if (!budget) {
+        const error = createError(404, `budget ${budgetId} not found`);
+        throw error;
+    }
+    const totalExpenses = await getSpentAmountForBudget(budgetId)
+    const {amount, reason} = data
+    const remainingAmount = budget.allocatedAmount - (totalExpenses + amount)
+    if (remainingAmount < 0) {
+        const error = createError()
+    }
+
+};
+
+export default {
+    createNewBudget,
+    getBugetsAndDetails,
+    getTransactionsForBudget,
+};
