@@ -17,4 +17,20 @@ const createNewBudget = async (data) => {
     return newBudget
 }
 
-export default {createNewBudget}
+const getSpentAmountForBudget = async (budgetId) => {
+    const expenses = await budgetsDal.getExpensesForBudget(budgetId)
+    const total = expenses.reduce((total, expense) => total + expense.amount, 0)
+    return total
+}
+
+const getBugetsAndDetailes = async (filter) => {
+    const budgets = await budgetsDal.getBudgetByFilter(filter)
+    for (const budget of budgets) {
+        const spentAmount = await getSpentAmountForBudget(budget.id)
+        budget.spentAmount = spentAmount
+        budget.remainingAmount = budget.allocatedAmount - spentAmount
+    }
+    return budgets
+}
+
+export default {createNewBudget, getBugetsAndDetailes}

@@ -8,6 +8,14 @@ export const checkBody = (req, res, next) => {
     next()
 }
 
+export const checkQuery = (req, res, next) => {
+    if (!req.query) {
+        const error = createError(400, "no query")
+        throw error
+    }
+    next()
+}
+
 export const logger = (req, res, next) => {
     console.log(req.method, req.url);
     next();

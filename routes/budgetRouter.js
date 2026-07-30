@@ -1,7 +1,7 @@
 import express from "express"
 import budgetService from "../services/budgetService.js"
 import { missingField } from "../utils/utils.js" 
-import { checkBody } from "../middleWares/middlewares.js"
+import { checkBody, checkQuery } from "../middleWares/middlewares.js"
 
 
 const router = express.Router()
@@ -14,6 +14,17 @@ router.post("", checkBody, async (req, res) => {
     }
     const newBudget = await budgetService.createNewBudget(req.body)
     res.status(201).send(newBudget)
+})
+
+router.get("", checkQuery, async (req, res) => {
+    
+    const {unit, month, benefitType} = req.query
+    const filter = {}
+    if (unit) filter.unit = unit
+    if (month) filter.month = month
+    if (benefitType) filter.benefitType = benefitType
+    const budgets = await budgetService.getBugetsAndDetailes(filter)
+    res.send(budgets)
 })
 
 export default router

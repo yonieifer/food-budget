@@ -12,6 +12,17 @@ const getBudgetByFilter = async (filter) => {
     return data
 }
 
+const getBudgetById = async (budgetId) => {
+    const { data, error } = await sb.from("budgets").select().eq("budgetId", budgetId)
+    if (error) throw error
+    return data[0]
+}
+
+const getExpensesForBudget = async (budgetId) => {
+    const {data, error} = await sb.from("expenses").select().eq("budgetId", budgetId)
+    if (error) throw error
+    return data
+}
 
 
-export default {createBudget, getBudgetByFilter}
+export default {createBudget, getBudgetByFilter, getBudgetById, getExpensesForBudget}
