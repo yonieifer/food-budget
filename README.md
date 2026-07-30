@@ -52,3 +52,13 @@ dbConnection/
 utils/
     utils.js
 
+הוראות הרצה:
+להרצת קונטיינר בדוקר:
+ docker build .
+ docker-compose up -d
+
+
+להרצה בטרמינל:
+npm run dev
+או:
+node --watch --env-file=.env app.js
