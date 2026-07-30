@@ -1,7 +1,7 @@
 FROM node:24-alpine
 WORKDIR /app
-COPY node_modules .
+COPY package*.json ./
 RUN npm install 
 COPY . .
-CMD ["npm", "RUN", "dev"]
 EXPOSE 3000
+CMD ["node", "--watch", "app.js"]
