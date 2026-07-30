@@ -13,7 +13,7 @@ const getBudgetByFilter = async (filter) => {
 }
 
 const getBudgetById = async (budgetId) => {
-    const { data, error } = await sb.from("budgets").select().eq("budgetId", budgetId)
+    const { data, error } = await sb.from("budgets").select().eq("id", budgetId)
     if (error) throw error
     return data[0]
 }
