@@ -70,8 +70,8 @@ const createExpenseForBudget = async (data, budgetId) => {
     }
     const totalExpenses = await getSpentAmountForBudget(budgetId);
     const { amount, reason } = data;
-    const remainingAmount = budget.allocatedAmount - (totalExpenses + amount);
-    if (remainingAmount < 0) {
+    const remainingAmount = budget.allocatedAmount - totalExpenses;
+    if (remainingAmount - amount < 0) {
         return { error: "expense amount is too large", remainingAmount };
     }
     const newExpense = await expensesDal.createExpense({
@@ -80,7 +80,7 @@ const createExpenseForBudget = async (data, budgetId) => {
         reason,
         createdAt: new Date().toISOString(),
     });
-    return { expense: newExpense, remainingAmount };
+    return { expense: newExpense, remainingAmount: remainingAmount - amount};
 };
 
 export default {
