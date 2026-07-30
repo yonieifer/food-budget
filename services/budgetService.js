@@ -16,3 +16,5 @@ const createNewBudget = async (data) => {
     const newBudget = await budgetsDal.createBudget({unit, benefitType, month, allocatedAmount})
     return newBudget
 }
+
+export default {createNewBudget}
